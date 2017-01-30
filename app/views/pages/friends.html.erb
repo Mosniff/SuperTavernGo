@@ -1,0 +1,29 @@
+Friends:<br>
+<% @friends.each do |friend| %>
+  <%= friend.email %><br>
+<% end %>
+<br>
+<br>
+
+Add Friend:
+<%= form_tag pages_find_user_path do %>
+  <label for="email">Friend's Email</label>
+  <%= text_field_tag :email %>
+  <%= submit_tag "Submit" %>
+<% end %>
+<br>
+<br>
+
+Received Friend Requests:<br>
+<% @pending_friends.each do |friend| %>
+  <%= friend.email %><br>
+<% end %>
+<br>
+<br>
+
+Sent Friend Requests:<br>
+<% @requested_friends.each do |friend| %>
+  <%= friend.email %><br>
+<% end %>
+<br>
+<br>

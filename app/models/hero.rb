@@ -16,6 +16,7 @@ class Hero < ApplicationRecord
 
   def take_damage(number)
     self.hp -= number
+    check_hp
     self.save
   end
 

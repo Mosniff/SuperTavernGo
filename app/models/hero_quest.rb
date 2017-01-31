@@ -20,6 +20,7 @@ class HeroQuest < ApplicationRecord
       random_damage = rand(half_danger)
       damage = ((self.quest.danger - half_danger) + (random_damage * 2)).to_i
       self.hero.take_damage(damage)
+      self.hero.is_questing = false
       # Change quest 'required' values based on hero's stats
       self.required_strength -= self.hero.strength
       self.required_cunning -= self.hero.cunning

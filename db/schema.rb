@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170131220314) do
+ActiveRecord::Schema.define(version: 20170131221946) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -56,6 +56,10 @@ ActiveRecord::Schema.define(version: 20170131220314) do
     t.integer  "strength"
     t.integer  "cunning"
     t.integer  "magic"
+    t.integer  "gold",        default: 0
+    t.integer  "experience",  default: 0
+    t.integer  "stories",     default: 0
+    t.integer  "prestige",    default: 0
     t.index ["user_id"], name: "index_heroes_on_user_id", using: :btree
   end
 

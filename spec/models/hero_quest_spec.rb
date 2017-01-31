@@ -12,20 +12,10 @@ describe HeroQuest do
     @quest1 = Quest.create(maximum_chapters: 8, required_strength: 4, required_cunning: 4, required_magic: 4,
       danger: 20, gold_reward: 100, stories_reward: 100, experience_reward: 100
     )
-    @quest2 = Quest.create(maximum_chapters: 8, required_strength: 10, required_cunning: 10, required_magic: 10,
-      danger: 20, gold_reward: 100, stories_reward: 100, experience_reward: 100
-    )
+    # @quest2 = Quest.create(maximum_chapters: 8, required_strength: 10, required_cunning: 10, required_magic: 10,
+    #   danger: 20, gold_reward: 100, stories_reward: 100, experience_reward: 100
+    # )
     @hero_quest1 = @hero1.initiate_quest(@quest1)
-    # @hero_quest1 = HeroQuest.create(hero_id: @hero1.id, quest_id: @quest1.id)
-  end
-
-  it "should only allow the Hero to initiate a chapter if the User is within range" do
-    # The range will be 100ft
-
-  end
-
-  it "should reward the Hero when the User claims the reward for the completed HeroQuest" do
-
   end
 
   describe "initiating a chapter" do
@@ -42,6 +32,11 @@ describe HeroQuest do
     end
 
     it "should not allow the Hero to attempt more chapters than the Quest's maximum chapter limit" do
+
+    end
+
+    it "should only allow the Hero to initiate a chapter if the User is within range" do
+    # The range will be 100ft
 
     end
 
@@ -119,6 +114,28 @@ describe HeroQuest do
       end
     end
 
+  end
+
+  it "should reward the Hero when the User claims the reward for the completed HeroQuest" do
+    Timecop.freeze(Time.now) do
+      @hero_quest1.initiate_chapter
+      expect(@hero1.gold).to eq(0)
+      expect(@hero1.experience).to eq(0)
+      expect(@hero1.stories).to eq(0)
+    end
+    Timecop.freeze(Time.now + 61.minutes) do
+      @hero_quest1.see_chapter_results
+      @hero1.reload
+      @hero_quest1.initiate_chapter
+    end
+    Timecop.freeze(Time.now + 122.minutes) do
+      @hero_quest1.see_chapter_results
+      @hero_quest1.claim_reward
+      @hero1.reload
+      expect(@hero1.gold).to eq(0 + @hero_quest1.gold_reward)
+      expect(@hero1.experience).to eq(0 + @hero_quest1.experience_reward)
+      expect(@hero1.stories).to eq(0 + @hero_quest1.stories_reward)
+    end
   end
   
 end

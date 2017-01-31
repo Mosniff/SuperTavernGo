@@ -39,5 +39,18 @@ class HeroQuest < ApplicationRecord
       self.is_completed = true  
     end
   end
-  
+
+  def claim_reward
+    if is_completed = true
+      self.hero.gold += self.gold_reward
+      self.hero.experience += self.experience_reward
+      self.hero.stories += self.stories_reward
+      self.hero.save
+      self.destroy
+    else
+      # raise error?
+      # %%%  
+    end
+  end
+
 end

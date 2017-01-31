@@ -15,6 +15,13 @@ describe Quest do
     expect(@hero1.hero_quests.count).to eq(1)
   end
 
+  it "should create the HeroQuest with values based off the original Quest" do
+    @hero_quest1 = @hero1.initiate_quest(@quest1)
+    expect(@hero_quest1.maximum_chapters).to eq(@quest1.maximum_chapters)
+    # more, danger, reward etc... %%%
+
+  end
+
   it "should not be possible to create a second HeroQuest for the same Quest for a given Hero" do
     @hero1.initiate_quest(@quest1)
     expect(@hero1.hero_quests.count).to eq(1)

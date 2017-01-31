@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170131155344) do
+ActiveRecord::Schema.define(version: 20170131163026) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -28,10 +28,12 @@ ActiveRecord::Schema.define(version: 20170131155344) do
   create_table "hero_quests", force: :cascade do |t|
     t.integer  "hero_id"
     t.integer  "quest_id"
-    t.datetime "created_at",                      null: false
-    t.datetime "updated_at",                      null: false
-    t.boolean  "is_in_progress",  default: false
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
+    t.boolean  "is_in_progress",     default: false
     t.datetime "chapter_started"
+    t.integer  "completed_chapters"
+    t.integer  "maximum_chapters"
     t.index ["hero_id"], name: "index_hero_quests_on_hero_id", using: :btree
     t.index ["quest_id"], name: "index_hero_quests_on_quest_id", using: :btree
   end
@@ -47,8 +49,9 @@ ActiveRecord::Schema.define(version: 20170131155344) do
   end
 
   create_table "quests", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+    t.integer  "maximum_chapters"
   end
 
   create_table "users", force: :cascade do |t|

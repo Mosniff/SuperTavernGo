@@ -9,7 +9,8 @@ describe HeroQuest do
     @hero1 = Hero.create(user_id: @user1.id, hp: 100)
     @quest1 = Quest.create
     @quest2 = Quest.create
-    @hero_quest1 = HeroQuest.create(hero_id: @hero1.id, quest_id: @quest1.id)
+    @hero_quest1 = @hero1.initiate_quest(@quest1)
+    # @hero_quest1 = HeroQuest.create(hero_id: @hero1.id, quest_id: @quest1.id)
   end
 
   it "should only allow the Hero to initiate a chapter if the User is within range" do
@@ -18,10 +19,6 @@ describe HeroQuest do
   end
 
   # Hero needs an 'available' boolean which gets set back to true only after results are viewed?
-
-  it "should allow the User to view the chapter results after the Hero has been questing for 1 hour" do
-
-  end
 
   it "should deal damage to the Hero based on the danger of the Quest when the chapter's results are viewed" do
 
@@ -50,6 +47,21 @@ describe HeroQuest do
       @hero_quest1.reload
       expect(@hero1.is_questing).to be(true)
       expect(@hero_quest1.is_in_progress).to be(true)
+    end
+
+    it "should allow the User to view the chapter results after the Hero has been questing for 1 hour" do
+      # only show "ready to see progress" logic in the view???
+      Timecop.freeze(Time.now) do
+        @hero_quest1.initiate_chapter
+        @hero_quest1.see_chapter_results
+        # see error? 
+        # %%%
+        expect(@hero_quest1.completed_chapters).to eq(0)
+      end
+      Timecop.freeze(Time.now + 61.minutes) do
+        @hero_quest1.see_chapter_results
+        expect(@hero_quest1.completed_chapters).to eq(1)
+      end
     end
 
   end

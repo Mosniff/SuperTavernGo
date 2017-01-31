@@ -23,7 +23,9 @@ class Hero < ApplicationRecord
     if HeroQuest.find_by(hero_id: self.id, quest_id: quest.id).nil?
       HeroQuest.create(
         hero_id: self.id,
-        quest_id: quest.id
+        quest_id: quest.id,
+        maximum_chapters: quest.maximum_chapters,
+        completed_chapters: 0
       )
     else
       # error???

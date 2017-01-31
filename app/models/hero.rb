@@ -19,9 +19,15 @@ class Hero < ApplicationRecord
   end
 
   def initiate_quest(quest)
-    HeroQuest.create(
-      hero_id: self.id,
-      quest_id: quest.id
-    )
+    if HeroQuest.find_by(hero_id: self.id, quest_id: quest.id).nil?
+      HeroQuest.create(
+        hero_id: self.id,
+        quest_id: quest.id
+      )
+    else
+      # error???
+      # %%%
+    end
   end
+
 end

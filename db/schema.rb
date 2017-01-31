@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170131000614) do
+ActiveRecord::Schema.define(version: 20170131152241) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,6 +25,15 @@ ActiveRecord::Schema.define(version: 20170131000614) do
     t.integer  "status"
   end
 
+  create_table "hero_quests", force: :cascade do |t|
+    t.integer  "hero_id"
+    t.integer  "quest_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["hero_id"], name: "index_hero_quests_on_hero_id", using: :btree
+    t.index ["quest_id"], name: "index_hero_quests_on_quest_id", using: :btree
+  end
+
   create_table "heroes", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "hp"
@@ -32,6 +41,11 @@ ActiveRecord::Schema.define(version: 20170131000614) do
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
     t.index ["user_id"], name: "index_heroes_on_user_id", using: :btree
+  end
+
+  create_table "quests", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade do |t|
@@ -51,5 +65,7 @@ ActiveRecord::Schema.define(version: 20170131000614) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   end
 
+  add_foreign_key "hero_quests", "heroes"
+  add_foreign_key "hero_quests", "quests"
   add_foreign_key "heroes", "users"
 end

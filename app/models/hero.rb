@@ -1,5 +1,6 @@
 class Hero < ApplicationRecord
   belongs_to :user
+  has_many :hero_quests
 
   def update_status
     self.check_hp
@@ -15,5 +16,12 @@ class Hero < ApplicationRecord
 
   def take_damage(number)
     self.hp -= number
+  end
+
+  def initiate_quest(quest)
+    HeroQuest.create(
+      hero_id: self.id,
+      quest_id: quest.id
+    )
   end
 end

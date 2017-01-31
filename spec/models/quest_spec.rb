@@ -10,11 +10,19 @@ describe Quest do
   end
 
   it "should create a new HeroQuest for a given Hero when initiated" do
+    expect(@hero1.hero_quests.count).to be(0)
+    @hero1.initiate_quest(@quest1)
+    expect(@hero1.hero_quests.count).to be(1)
+  end
 
+  it "should not be possible to create a second HeroQuest for the same Quest for a given Hero" do
+    
   end
 
   it "should only be possible to initiate a Quest if the User is within range" do
     # The range will be 100ft
+    # How test???
+    # %%%
 
   end
 

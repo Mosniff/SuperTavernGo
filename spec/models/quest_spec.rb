@@ -5,8 +5,12 @@ describe Quest do
   before do
     @user1 = User.create(email: "test1@test.com", password: "123456")
     @hero1 = Hero.create(user_id: @user1.id, hp: 100)
-    @quest1 = Quest.create
-    @quest2 = Quest.create
+    @quest1 = Quest.create(maximum_chapters: 8, required_strength: 10, required_cunning: 10, required_magic: 10,
+      danger: 20, gold_reward: 100, stories_reward: 100, experience_reward: 100
+    )
+    @quest2 = Quest.create(maximum_chapters: 8, required_strength: 10, required_cunning: 10, required_magic: 10,
+      danger: 20, gold_reward: 100, stories_reward: 100, experience_reward: 100
+    )
   end
 
   it "should create a new HeroQuest for a given Hero when initiated" do
@@ -18,6 +22,18 @@ describe Quest do
   it "should create the HeroQuest with values based off the original Quest" do
     @hero_quest1 = @hero1.initiate_quest(@quest1)
     expect(@hero_quest1.maximum_chapters).to eq(@quest1.maximum_chapters)
+    expect(@hero_quest1.required_strength).to eq(@quest1.required_strength)
+    expect(@hero_quest1.required_cunning).to eq(@quest1.required_cunning)
+    expect(@hero_quest1.required_magic).to eq(@quest1.required_magic)
+    expect(@hero_quest1.danger).to eq(@quest1.danger)
+    expect(@hero_quest1.gold_reward).to eq(@quest1.gold_reward)
+    expect(@hero_quest1.stories_reward).to eq(@quest1.stories_reward)
+    expect(@hero_quest1.experience_reward).to eq(@quest1.experience_reward)
+    # expect(@hero_quest1.quest_type).to eq(@quest1.quest_type)
+    # expect(@hero_quest1.).to eq(@quest1.)
+    # expect(@hero_quest1.).to eq(@quest1.)
+    # expect(@hero_quest1.).to eq(@quest1.)
+    # expect(@hero_quest1.).to eq(@quest1.)
     # more, danger, reward etc... %%%
 
   end

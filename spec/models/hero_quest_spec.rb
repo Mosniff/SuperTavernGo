@@ -24,16 +24,27 @@ describe HeroQuest do
 
   end
 
-  it "should not allow the Hero to attempt more chapters than the Quest's maximum chapter limit" do
-
-  end
-
   it "should complete when all requirements are met" do
 
   end
 
   it "should reward the Hero when the User claims the reward for the completed HeroQuest" do
 
+  end
+
+  it "should allow the User to view the chapter results after the Hero has been questing for 1 hour" do
+    # only show "ready to see progress" logic in the view???
+    Timecop.freeze(Time.now) do
+      @hero_quest1.initiate_chapter
+      @hero_quest1.see_chapter_results
+      # see error? 
+      # %%%
+      expect(@hero_quest1.completed_chapters).to eq(0)
+    end
+    Timecop.freeze(Time.now + 61.minutes) do
+      @hero_quest1.see_chapter_results
+      expect(@hero_quest1.completed_chapters).to eq(1)
+    end
   end
 
   describe "initiating a chapter" do
@@ -49,19 +60,8 @@ describe HeroQuest do
       expect(@hero_quest1.is_in_progress).to be(true)
     end
 
-    it "should allow the User to view the chapter results after the Hero has been questing for 1 hour" do
-      # only show "ready to see progress" logic in the view???
-      Timecop.freeze(Time.now) do
-        @hero_quest1.initiate_chapter
-        @hero_quest1.see_chapter_results
-        # see error? 
-        # %%%
-        expect(@hero_quest1.completed_chapters).to eq(0)
-      end
-      Timecop.freeze(Time.now + 61.minutes) do
-        @hero_quest1.see_chapter_results
-        expect(@hero_quest1.completed_chapters).to eq(1)
-      end
+    it "should not allow the Hero to attempt more chapters than the Quest's maximum chapter limit" do
+
     end
 
   end

@@ -25,7 +25,14 @@ class Hero < ApplicationRecord
         hero_id: self.id,
         quest_id: quest.id,
         maximum_chapters: quest.maximum_chapters,
-        completed_chapters: 0
+        completed_chapters: 0,
+        required_strength: quest.required_strength,
+        required_cunning: quest.required_cunning,
+        required_magic: quest.required_magic,
+        danger: quest.danger,
+        gold_reward: quest.gold_reward,
+        experience_reward: quest.experience_reward,
+        stories_reward: quest.stories_reward
       )
     else
       # error???

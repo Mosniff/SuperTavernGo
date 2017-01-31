@@ -4,13 +4,16 @@ require 'rails_helper'
 
 describe HeroQuest do
 
-  it "should only allow the Hero to initiate a chapter if the User is within range" do
-    # The range will be 100ft
-
+  before do
+    @user1 = User.create(email: "test1@test.com", password: "123456")
+    @hero1 = Hero.create(user_id: @user1.id, hp: 100)
+    @quest1 = Quest.create
+    @quest2 = Quest.create
+    @hero_quest1 = HeroQuest.create(hero_id: @hero1.id, quest_id: @quest1.id)
   end
 
-  it "should set the Hero to 'questing' once a chapter is initiated" do
-    # HeroQuests progress through a series of 'chapters'
+  it "should only allow the Hero to initiate a chapter if the User is within range" do
+    # The range will be 100ft
 
   end
 
@@ -33,6 +36,21 @@ describe HeroQuest do
   end
 
   it "should reward the Hero when the User claims the reward for the completed HeroQuest" do
+
+  end
+
+  describe "initiating a chapter" do
+
+    it "should set the Hero to 'is_questing' and the HeroQuest to 'is_in_progress' once a chapter is initiated" do
+      # HeroQuests progress through a series of 'chapters'
+      expect(@hero1.is_questing).to be(false)
+      expect(@hero_quest1.is_in_progress).to be(false)
+      @hero_quest1.initiate_chapter
+      @hero1.reload
+      @hero_quest1.reload
+      expect(@hero1.is_questing).to be(true)
+      expect(@hero_quest1.is_in_progress).to be(true)
+    end
 
   end
   

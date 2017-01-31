@@ -20,6 +20,14 @@ describe Hero do
 
     end
 
+    it "should not be able initiate any new HeroQuests when fainted" do
+
+    end
+
+    it "should not be able initiate any new HeroQuest chapters when fainted" do
+
+    end
+
   end
 
   it "should be able to level up when they hit the required XP" do

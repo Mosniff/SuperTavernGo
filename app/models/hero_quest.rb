@@ -15,6 +15,12 @@ class HeroQuest < ApplicationRecord
 
   def see_chapter_results
     if self.chapter_started + 1.hour < Time.now
+      # Calculate damage that hero takes, is randomly determined quest.danger +/- 50%
+      half_danger = (self.quest.danger / 2).to_i 
+      random_damage = rand(half_danger)
+      damage = ((self.quest.danger - half_danger) + (random_damage * 2)).to_i
+      self.hero.take_damage(damage)
+      self.hero.save
       self.completed_chapters += 1
     else
       # %%% raise error??

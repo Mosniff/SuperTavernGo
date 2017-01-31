@@ -26,10 +26,18 @@ class HeroQuest < ApplicationRecord
       self.required_cunning -= self.hero.cunning
       self.required_magic -= self.hero.magic
       self.completed_chapters += 1
+      check_if_completed
       self.save
       self.hero.save
     else
       # %%% raise error??
     end
   end
+
+  def check_if_completed
+    if self.required_strength <= 0 && self.required_cunning <= 0 && self.required_magic <= 0
+      self.is_completed = true  
+    end
+  end
+  
 end

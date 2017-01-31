@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170131213837) do
+ActiveRecord::Schema.define(version: 20170131220314) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -41,6 +41,7 @@ ActiveRecord::Schema.define(version: 20170131213837) do
     t.integer  "gold_reward"
     t.integer  "experience_reward"
     t.integer  "stories_reward"
+    t.boolean  "is_completed",       default: false
     t.index ["hero_id"], name: "index_hero_quests_on_hero_id", using: :btree
     t.index ["quest_id"], name: "index_hero_quests_on_quest_id", using: :btree
   end

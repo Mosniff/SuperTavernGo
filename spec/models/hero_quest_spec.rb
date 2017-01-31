@@ -9,7 +9,7 @@ describe HeroQuest do
     @hero1 = Hero.create(user_id: @user1.id, hp: 100,
       strength: 2, cunning: 2, magic: 2
     )
-    @quest1 = Quest.create(maximum_chapters: 8, required_strength: 10, required_cunning: 10, required_magic: 10,
+    @quest1 = Quest.create(maximum_chapters: 8, required_strength: 4, required_cunning: 4, required_magic: 4,
       danger: 20, gold_reward: 100, stories_reward: 100, experience_reward: 100
     )
     @quest2 = Quest.create(maximum_chapters: 8, required_strength: 10, required_cunning: 10, required_magic: 10,
@@ -82,16 +82,16 @@ describe HeroQuest do
 
     it "should update the 'required' values of the HeroQuest based on the Hero's stats" do
       Timecop.freeze(Time.now) do
-        expect(@hero_quest1.required_strength).to eq(10)
-        expect(@hero_quest1.required_cunning).to eq(10)
-        expect(@hero_quest1.required_magic).to eq(10)
+        expect(@hero_quest1.required_strength).to eq(4)
+        expect(@hero_quest1.required_cunning).to eq(4)
+        expect(@hero_quest1.required_magic).to eq(4)
       end
       Timecop.freeze(Time.now + 61.minutes) do
         @hero_quest1.see_chapter_results
         @hero_quest1.reload
-        expect(@hero_quest1.required_strength).to eq(10 - @hero1.strength)
-        expect(@hero_quest1.required_cunning).to eq(10 - @hero1.cunning)
-        expect(@hero_quest1.required_magic).to eq(10 - @hero1.magic)
+        expect(@hero_quest1.required_strength).to eq(4 - @hero1.strength)
+        expect(@hero_quest1.required_cunning).to eq(4 - @hero1.cunning)
+        expect(@hero_quest1.required_magic).to eq(4 - @hero1.magic)
       end
     end
 
@@ -108,7 +108,15 @@ describe HeroQuest do
     end
 
     it "should complete when all requirements are met" do
-
+      Timecop.freeze(Time.now + 61.minutes) do
+        @hero_quest1.see_chapter_results
+        @hero1.reload
+        @hero_quest1.initiate_chapter
+      end
+      Timecop.freeze(Time.now + 122.minutes) do
+        @hero_quest1.see_chapter_results
+        expect(@hero_quest1.is_completed).to be(true)
+      end
     end
 
   end

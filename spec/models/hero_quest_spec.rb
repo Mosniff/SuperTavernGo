@@ -6,7 +6,9 @@ describe HeroQuest do
 
   before do
     @user1 = User.create(email: "test1@test.com", password: "123456")
-    @hero1 = Hero.create(user_id: @user1.id, hp: 100)
+    @hero1 = Hero.create(user_id: @user1.id, hp: 100,
+      strength: 2, cunning: 2, magic: 2
+    )
     @quest1 = Quest.create(maximum_chapters: 8, required_strength: 10, required_cunning: 10, required_magic: 10,
       danger: 20, gold_reward: 100, stories_reward: 100, experience_reward: 100
     )
@@ -53,10 +55,15 @@ describe HeroQuest do
 
   describe "viewing the results of a chapter" do
 
+    before do 
+      Timecop.freeze(Time.now) do
+        @hero_quest1.initiate_chapter
+      end
+    end
+
     it "should allow the User to view the chapter results after the Hero has been questing for 1 hour" do
       # only show "ready to see progress" logic in the view???
       Timecop.freeze(Time.now) do
-        @hero_quest1.initiate_chapter
         @hero_quest1.see_chapter_results
         # see error? 
         # %%%
@@ -70,13 +77,27 @@ describe HeroQuest do
 
     it "should deal damage to the Hero based on the danger of the Quest when the chapter's results are viewed" do
       Timecop.freeze(Time.now) do
-        @hero_quest1.initiate_chapter
         expect(@hero1.hp).to eq(100)
       end
       Timecop.freeze(Time.now + 61.minutes) do
         @hero_quest1.see_chapter_results
         @hero1.reload
         expect(@hero1.hp).to be < 100
+      end
+    end
+
+    it "should update the 'required' values of the HeroQuest based on the Hero's stats" do
+      Timecop.freeze(Time.now) do
+        expect(@hero_quest1.required_strength).to eq(10)
+        expect(@hero_quest1.required_cunning).to eq(10)
+        expect(@hero_quest1.required_magic).to eq(10)
+      end
+      Timecop.freeze(Time.now + 61.minutes) do
+        @hero_quest1.see_chapter_results
+        @hero_quest1.reload
+        expect(@hero_quest1.required_strength).to eq(10 - @hero1.strength)
+        expect(@hero_quest1.required_cunning).to eq(10 - @hero1.cunning)
+        expect(@hero_quest1.required_magic).to eq(10 - @hero1.magic)
       end
     end
 

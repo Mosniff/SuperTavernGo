@@ -4,7 +4,9 @@ describe Hero do
 
   before do
     @user1 = User.create(email: "test1@test.com", password: "123456")
-    @hero1 = Hero.create(user_id: @user1.id, hp: 100)
+    @hero1 = Hero.create(user_id: @user1.id, hp: 100,
+      strength: 2, cunning: 2, magic: 2
+    )
   end
 
   describe "fainting" do

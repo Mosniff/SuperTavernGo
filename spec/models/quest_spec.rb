@@ -4,7 +4,9 @@ describe Quest do
 
   before do
     @user1 = User.create(email: "test1@test.com", password: "123456")
-    @hero1 = Hero.create(user_id: @user1.id, hp: 100)
+    @hero1 = Hero.create(user_id: @user1.id, hp: 100,
+      strength: 2, cunning: 2, magic: 2
+    )
     @quest1 = Quest.create(maximum_chapters: 8, required_strength: 10, required_cunning: 10, required_magic: 10,
       danger: 20, gold_reward: 100, stories_reward: 100, experience_reward: 100
     )

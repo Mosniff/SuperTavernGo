@@ -1,0 +1,47 @@
+<style>
+  #map {
+    height: 400px;
+  }
+</style>
+
+<div id="map">
+
+</div>
+
+<script>
+  function initMap() {
+    var markers = [];
+    var center = {lat: 51.51507236129975, lng: -0.06840705871582031};
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function (position) {
+          initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+          map.setCenter(initialLocation);
+      });
+    }
+
+    <% if ENV["RAILS_ENV"] == "test" %>
+      window.myMarkers = markers; // << for testing
+    <% end %>
+    
+    var map = new google.maps.Map(document.getElementById('map'), {
+      zoom: 18,
+      center: center
+    });
+    map.addListener("idle", function () {
+      var bounds = map.getBounds();
+      var ne = bounds.getNorthEast();
+      var sw = bounds.getSouthWest();
+      console.log(ne.lng(), sw.lng());
+      // find user's location
+      // $.get("<%#= locations_path %>.json?nelat=" + ne.lat() + "&nelng=" + ne.lng() + "&swlat=" + sw.lat() + "&swlng=" + sw.lng(), function (taverns) {
+
+      //   taverns.forEach(function (location) {
+      //     placeTavernMarker({id: location.id, lat: location.lat, lng: location.lng});
+      //   });
+      // });
+    });
+  }
+</script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=<%= ENV["google_api_key"].html_safe %>&callback=initMap">
+</script>

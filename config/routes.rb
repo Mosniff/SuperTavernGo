@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   root to: "pages#home"
 
   get 'pages/friends'
+  get 'pages/map'
   post 'pages/find_user' => 'pages#find_user' 
 
   

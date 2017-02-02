@@ -24,4 +24,8 @@ class PagesController < ApplicationController
     binding.pry
   end
 
+  def map
+    
+  end
+
 end

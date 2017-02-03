@@ -20,24 +20,29 @@ class Hero < ApplicationRecord
     self.save
   end
 
-  def initiate_quest(quest)
-    if HeroQuest.find_by(hero_id: self.id, quest_id: quest.id).nil?
-      HeroQuest.create(
-        hero_id: self.id,
-        quest_id: quest.id,
-        maximum_chapters: quest.maximum_chapters,
-        completed_chapters: 0,
-        required_strength: quest.required_strength,
-        required_cunning: quest.required_cunning,
-        required_magic: quest.required_magic,
-        danger: quest.danger,
-        gold_reward: quest.gold_reward,
-        experience_reward: quest.experience_reward,
-        stories_reward: quest.stories_reward
-      )
+  def initiate_quest(quest, user_lat, user_lng)
+    if quest.distance_from([user_lat, user_lng]) < 0.0621371
+      if HeroQuest.find_by(hero_id: self.id, quest_id: quest.id).nil?
+        HeroQuest.create(
+          hero_id: self.id,
+          quest_id: quest.id,
+          maximum_chapters: quest.maximum_chapters,
+          completed_chapters: 0,
+          required_strength: quest.required_strength,
+          required_cunning: quest.required_cunning,
+          required_magic: quest.required_magic,
+          danger: quest.danger,
+          gold_reward: quest.gold_reward,
+          experience_reward: quest.experience_reward,
+          stories_reward: quest.stories_reward
+        )
+      else
+        # error already on quest???
+        # %%%
+      end
     else
-      # error???
-      # %%%
+      # error not in range?
+      # %%%%
     end
   end
 

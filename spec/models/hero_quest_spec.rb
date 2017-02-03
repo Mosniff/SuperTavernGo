@@ -10,12 +10,14 @@ describe HeroQuest do
       strength: 2, cunning: 2, magic: 2
     )
     @quest1 = Quest.create(maximum_chapters: 8, required_strength: 4, required_cunning: 4, required_magic: 4,
-      danger: 20, gold_reward: 100, stories_reward: 100, experience_reward: 100
+      danger: 20, gold_reward: 100, stories_reward: 100, experience_reward: 100, 
+      latitude: 51.657762, longitude: -0.396906 
     )
     # @quest2 = Quest.create(maximum_chapters: 8, required_strength: 10, required_cunning: 10, required_magic: 10,
-    #   danger: 20, gold_reward: 100, stories_reward: 100, experience_reward: 100
+    #   danger: 20, gold_reward: 100, stories_reward: 100, experience_reward: 100, 
+    #   latitude: 51.654371, longitude: -0.394515
     # )
-    @hero_quest1 = @hero1.initiate_quest(@quest1)
+    @hero_quest1 = @hero1.initiate_quest(@quest1, 51.657762, -0.396906)
   end
 
   describe "initiating a chapter" do

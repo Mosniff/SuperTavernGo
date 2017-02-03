@@ -2,9 +2,26 @@
   #map {
     height: 400px;
   }
+  #quest_info {
+    height: 250px;
+    border: solid orange 1px;
+  }
 </style>
 
 <div id="map">
+
+</div>
+
+<div id="quest_info">
+  <span id="quest_required_strength"></span><br>
+  <span id="quest_required_cunning"></span><br>
+  <span id="quest_required_magic"></span><br>
+  <span id="quest_danger"></span><br>
+  <span id="quest_maximum_chapters"></span><br>
+  <span id="quest_gold_reward"></span><br>
+  <span id="quest_experience_reward"></span><br>
+  <span id="quest_stories_reward"></span><br>
+  <span id="quest_is_within_range"></span>
 
 </div>
 
@@ -13,10 +30,11 @@
     var markers = [];
     var center = {lat: 51.51507236129975, lng: -0.06840705871582031};
 
+    // find user's location
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(function (position) {
-          initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-          map.setCenter(initialLocation);
+        initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+        map.setCenter(initialLocation);
       });
     }
 
@@ -28,19 +46,71 @@
       zoom: 18,
       center: center
     });
+
     map.addListener("idle", function () {
       var bounds = map.getBounds();
       var ne = bounds.getNorthEast();
       var sw = bounds.getSouthWest();
       console.log(ne.lng(), sw.lng());
-      // find user's location
-      // $.get("<%#= locations_path %>.json?nelat=" + ne.lat() + "&nelng=" + ne.lng() + "&swlat=" + sw.lat() + "&swlng=" + sw.lng(), function (taverns) {
+      $.get("<%= quests_path %>.json?nelat=" + ne.lat() + "&nelng=" + ne.lng() + "&swlat=" + sw.lat() + "&swlng=" + sw.lng(), function (quests) {
 
-      //   taverns.forEach(function (location) {
-      //     placeTavernMarker({id: location.id, lat: location.lat, lng: location.lng});
-      //   });
-      // });
+        quests.forEach(function (quest) {
+          placeQuestMarker({id: quest.id, lat: quest.latitude, lng: quest.longitude, str: quest.required_strength,
+            cun: quest.required_cunning, mag: quest.required_magic, chapter_limit: quest.maximum_chapters,
+            dang: quest.danger, gold: quest.gold_reward, exp: quest.experience_reward, stor: quest.stories_reward
+          });
+        });
+      });
     });
+
+    function placeQuestMarker(quest) {
+      var marker = new google.maps.Marker({
+      id: quest.id,
+      notes: quest.notes,
+      position: quest,
+      map: map
+      });
+      marker.addListener("click", function () {
+        $("#quest_required_strength").text("Required Strength: " + quest.str);
+        $("#quest_required_cunning").text("Required Cunning: " + quest.cun);
+        $("#quest_required_magic").text("Required Magic: " + quest.mag);
+        $("#quest_danger").text("Danger: " + quest.dang);
+        $("#quest_maximum_chapters").text("Maximum Chapters: " + quest.chapter_limit);
+        $("#quest_gold_reward").text("Gold Reward: " + quest.gold);
+        $("#quest_experience_reward").text("Experience Reward: " + quest.exp);
+        $("#quest_stories_reward").text("Stories Reward: " + quest.stor);
+        window.navigator.geolocation.getCurrentPosition(function(pos) {
+          var distance_to_quest = 0;
+          distance_to_quest = distance(pos.coords.longitude, pos.coords.latitude, quest.lng, quest.lat);
+          console.log(distance_to_quest);
+          if (distance_to_quest < 0.1) {
+            $("#quest_is_within_range").text("Quest within range");
+          } else if (distance_to_quest > 0.1) {
+            $("#quest_is_within_range").text("Quest out of range");
+          }
+        });
+      });
+      markers.push(quest);  
+    }
+
+    function distance(lon1, lat1, lon2, lat2) {
+      var R = 6371; // Radius of the earth in km
+      var dLat = (lat2-lat1).toRad();  // Javascript functions in radians
+      var dLon = (lon2-lon1).toRad(); 
+      var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+              Math.cos(lat1.toRad()) * Math.cos(lat2.toRad()) * 
+              Math.sin(dLon/2) * Math.sin(dLon/2); 
+      var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+      var d = R * c; // Distance in km
+      return d;
+    }
+
+    if (typeof(Number.prototype.toRad) === "undefined") {
+      Number.prototype.toRad = function() {
+        return this * Math.PI / 180;
+      }
+    }
+
   }
 </script>
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=<%= ENV["google_api_key"].html_safe %>&callback=initMap">

@@ -5,7 +5,9 @@ Rails.application.routes.draw do
 
   get 'pages/friends'
   get 'pages/map'
-  post 'pages/find_user' => 'pages#find_user' 
+  post 'pages/find_user' => 'pages#find_user'
+
+  resources :quests, only: [:index]
 
   
 end

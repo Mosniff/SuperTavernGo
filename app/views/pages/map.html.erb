@@ -13,6 +13,7 @@
 </div>
 
 <div id="quest_info">
+  <strong><span id="quest_name"></span></strong><br>
   <span id="quest_required_strength"></span><br>
   <span id="quest_required_cunning"></span><br>
   <span id="quest_required_magic"></span><br>
@@ -57,7 +58,8 @@
         quests.forEach(function (quest) {
           placeQuestMarker({id: quest.id, lat: quest.latitude, lng: quest.longitude, str: quest.required_strength,
             cun: quest.required_cunning, mag: quest.required_magic, chapter_limit: quest.maximum_chapters,
-            dang: quest.danger, gold: quest.gold_reward, exp: quest.experience_reward, stor: quest.stories_reward
+            dang: quest.danger, gold: quest.gold_reward, exp: quest.experience_reward, stor: quest.stories_reward, 
+            name: quest.name
           });
         });
       });
@@ -71,6 +73,7 @@
       map: map
       });
       marker.addListener("click", function () {
+        $("#quest_name").text(quest.name);
         $("#quest_required_strength").text("Required Strength: " + quest.str);
         $("#quest_required_cunning").text("Required Cunning: " + quest.cun);
         $("#quest_required_magic").text("Required Magic: " + quest.mag);
